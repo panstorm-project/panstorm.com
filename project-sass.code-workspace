@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
+	},
+	"extensions": {
+		"recommendations": [
+			"valeryanm.vscode-phpsab",
+			"EditorConfig.EditorConfig",
+            "laravel.vscode-laravel",
+			"streetsidesoftware.code-spell-checker",
+		],
+		"unwantedRecommendations": []
+	},
+	"settings": {
+		"[php]": {
+			"editor.detectIndentation": true,
+			"editor.useTabStops": true,
+			"editor.formatOnSave": true,
+			"editor.insertSpaces": false,
+			"editor.defaultFormatter": "valeryanm.vscode-phpsab"
+		},
+	}
+}
