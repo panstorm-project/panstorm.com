@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 test('to array', function () {
-    $user = \App\Models\User::factory()->create()->refresh();
+    $user = App\Models\User::factory()->create()->refresh();
 
     expect(array_keys($user->toArray()))
         ->toBe([
