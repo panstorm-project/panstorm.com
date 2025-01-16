@@ -14,6 +14,8 @@
 			"EditorConfig.EditorConfig",
             "laravel.vscode-laravel",
 			"streetsidesoftware.code-spell-checker",
+            "yoavbls.pretty-ts-errors",
+            "streetsidesoftware.code-spell-checker"
 		],
 		"unwantedRecommendations": []
 	},

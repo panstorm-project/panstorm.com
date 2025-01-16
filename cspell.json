@@ -1,0 +1,21 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+        "node_modules",
+        "dist",
+        "build",
+        "public",
+        ".env",
+        ".gitignore",
+        ".gitattributes",
+        ".vscode",
+        "package-lock.json",
+        "cspell.json",
+        "project-sass.code-workspace",
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [],
+    "ignoreWords": [],
+    "import": []
+}
