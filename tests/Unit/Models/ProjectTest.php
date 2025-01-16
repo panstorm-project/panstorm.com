@@ -23,3 +23,9 @@ it('belongs to a user', function () {
 
     expect($project->user)->toBeInstanceOf(User::class);
 });
+
+it('may have pages', function () {
+    $project = Project::factory()->hasPages(3)->create();
+
+    expect($project->pages)->toHaveCount(3);
+});
