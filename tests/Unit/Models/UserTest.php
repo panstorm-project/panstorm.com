@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Models\Project;
+use App\Models\User;
+
 test('to array', function () {
-    $user = App\Models\User::factory()->create()->refresh();
+    $user = User::factory()->create()->refresh();
 
     expect(array_keys($user->toArray()))
         ->toBe([
@@ -14,4 +17,11 @@ test('to array', function () {
             'created_at',
             'updated_at',
         ]);
+});
+
+it('may have projects', function () {
+    $user = User::factory()->hasProjects(3)->create();
+
+    expect($user->projects)->toHaveCount(3)
+        ->each->toBeInstanceOf(Project::class);
 });
