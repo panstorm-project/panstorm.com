@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\EventType;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +22,10 @@ final class ActivityFactory extends Factory
     {
         return [
             'project_id' => Project::factory(),
-            'events' => [],
+            'events' => [
+                EventType::view('/about'),
+                EventType::viewDuration(2),
+            ],
         ];
     }
 }
