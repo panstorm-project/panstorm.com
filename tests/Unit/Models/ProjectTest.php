@@ -29,3 +29,9 @@ it('may have pages', function () {
 
     expect($project->pages)->toHaveCount(3);
 });
+
+it('has activities', function () {
+    $page = Project::factory()->hasActivities(3)->create();
+
+    expect($page->activities)->toHaveCount(3);
+});

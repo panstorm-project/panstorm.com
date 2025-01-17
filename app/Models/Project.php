@@ -34,4 +34,14 @@ final class Project extends Model
     {
         return $this->hasMany(Page::class);
     }
+
+    /**
+     * Get the activities for the project.
+     *
+     * @return HasMany<Activity, $this>
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
 }
