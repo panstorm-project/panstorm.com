@@ -39,6 +39,7 @@ it('casts events to array', function () {
             fn (Expectation $event) => $event->toBe([
                 'type' => 'view_duration',
                 'payload' => [
+                    'url' => '/about',
                     'seconds' => '2',
                 ],
             ]),

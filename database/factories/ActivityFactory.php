@@ -24,7 +24,7 @@ final class ActivityFactory extends Factory
             'project_id' => Project::factory(),
             'events' => [
                 EventType::view('/about'),
-                EventType::viewDuration(2),
+                EventType::viewDuration('/about', 2),
             ],
         ];
     }

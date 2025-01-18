@@ -22,8 +22,11 @@ enum EventType: string
     /**
      * Create a new view duration event.
      */
-    public static function viewDuration(int $seconds): Event
+    public static function viewDuration(string $url, int $seconds): Event
     {
-        return new Event(self::ViewDuration, ['seconds' => (string) $seconds]);
+        return new Event(self::ViewDuration, [
+            'url' => $url,
+            'seconds' => (string) $seconds,
+        ]);
     }
 }
