@@ -24,10 +24,11 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y aspell aspell-en
 
-      - name: Cache Dependencies
+      - name: Cache Dependencies PHP
+        id: php-cache
         uses: actions/cache@v4
         with:
-          path: ~/.composer/cache/files
+          path: vendor
           key: dependencies-php-composer-${{ hashFiles('composer.lock') }}
 
       - name: Setup PHP
@@ -49,6 +50,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install PHP dependencies
+        if: steps.php-cache.outputs.cache-hit != 'true'
         run: composer install --no-interaction --no-progress --ansi
 
       - name: Get NPM cache directory
