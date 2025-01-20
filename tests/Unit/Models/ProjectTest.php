@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 test('to array', function () {
     $project = Project::factory()->create()->refresh();
@@ -36,10 +37,19 @@ it('has activities', function () {
     expect($page->activities)->toHaveCount(3);
 });
 
-it('may contain two projects with the same name', function () {
+it('two users may contain projects with the same name', function () {
     $projectA = Project::factory()->create(['name' => 'My Project']);
     $projectB = Project::factory()->create(['name' => 'My Project']);
 
     expect($projectA->name)->toBe('My Project')
         ->and($projectB->name)->toBe('My Project');
 });
+
+test('the same user may not contain projects with the same name', function () {
+    $user = User::factory()->create();
+
+    Project::factory()
+        ->for($user)
+        ->count(2)
+        ->create(['name' => 'My Project']);
+})->throws(QueryException::class);
