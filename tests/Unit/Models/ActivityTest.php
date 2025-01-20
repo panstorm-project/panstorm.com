@@ -27,13 +27,10 @@ it('belongs to a project', function () {
 });
 
 it('casts events to array', function () {
-    $path = '/'.fake()->slug();
-    $seconds = fake()->numberBetween(2, 30);
-
     $activity = Activity::factory()->state([
         'events' => [
-            EventType::view($path),
-            EventType::viewDuration($path, $seconds),
+            EventType::view('/about'),
+            EventType::viewDuration('/about', 42),
         ],
     ])->create();
 
@@ -42,14 +39,14 @@ it('casts events to array', function () {
             fn (Expectation $event) => $event->toBe([
                 'type' => 'view',
                 'payload' => [
-                    'url' => $path,
+                    'url' => '/about',
                 ],
             ]),
             fn (Expectation $event) => $event->toBe([
                 'type' => 'view_duration',
                 'payload' => [
-                    'url' => $path,
-                    'seconds' => (string) $seconds,
+                    'url' => '/about',
+                    'seconds' => '42',
                 ],
             ]),
         );

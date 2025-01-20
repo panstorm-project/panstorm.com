@@ -35,3 +35,11 @@ it('has activities', function () {
 
     expect($page->activities)->toHaveCount(3);
 });
+
+it('may contain two projects with the same name', function () {
+    $projectA = Project::factory()->create(['name' => 'My Project']);
+    $projectB = Project::factory()->create(['name' => 'My Project']);
+
+    expect($projectA->name)->toBe('My Project')
+        ->and($projectB->name)->toBe('My Project');
+});
