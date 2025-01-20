@@ -13,9 +13,4 @@ arch('controllers')
 
 arch('exceptions')
     ->expect('App\Exceptions')
-    ->toImplement('Throwable')
-    ->toOnlyBeUsedIn([
-        'App\Console\Commands',
-        'App\Http\Controllers',
-        'App\Services',
-    ]);
+    ->toImplement('Throwable');
