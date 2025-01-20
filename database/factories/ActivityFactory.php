@@ -20,11 +20,13 @@ final class ActivityFactory extends Factory
      */
     public function definition(): array
     {
+        $path = '/'.fake()->slug();
+
         return [
             'project_id' => Project::factory(),
             'events' => [
-                EventType::view('/about'),
-                EventType::viewDuration('/about', 2),
+                EventType::view($path),
+                EventType::viewDuration($path, fake()->numberBetween(2, 30)),
             ],
         ];
     }
