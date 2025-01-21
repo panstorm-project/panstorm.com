@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
 
 arch()->preset()->php();
 arch()->preset()->laravel();
