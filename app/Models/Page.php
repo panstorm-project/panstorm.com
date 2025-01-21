@@ -26,12 +26,14 @@ final class Page extends Model
     /**
      * The attributes that should be cast.
      *
-     * @return array{bucket: 'datetime'}
+     * @return array{bucket: 'datetime', views: 'integer', average_time: 'integer'}
      */
     protected function casts(): array
     {
         return [
             'bucket' => 'datetime',
+            'views' => 'integer',
+            'average_time' => 'integer',
         ];
     }
 }

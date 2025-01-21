@@ -23,7 +23,7 @@ final readonly class CreateActivity
                 'events' => $events,
             ]);
 
-            IngestActivity::dispatch($activity);
+            IngestActivity::dispatch($activity, now());
         });
     }
 }

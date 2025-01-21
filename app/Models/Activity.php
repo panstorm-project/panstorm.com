@@ -26,7 +26,7 @@ final class Activity extends Model
     /**
      * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array{events: 'array'}
      */
     protected function casts(): array
     {
