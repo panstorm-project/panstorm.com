@@ -32,7 +32,7 @@ final class IngestActivity implements ShouldQueue
         $events = $this->activity->events;
 
         collect($events)
-            ->map(fn (array $event): Event => match ($event['type']) {
+            ->map(fn (Event $event): Event => match ($event['type']) {
                 EventType::View->value => EventType::view($event['payload']['url']),
                 EventType::ViewDuration->value => EventType::viewDuration($event['payload']['url'], (int) $event['payload']['seconds']),
             })->each(function (Event $event): void {
