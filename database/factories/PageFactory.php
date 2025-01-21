@@ -21,6 +21,8 @@ final class PageFactory extends Factory
     {
         return [
             'project_id' => Project::factory(),
+            'path' => $this->faker->slug,
+            'bucket' => $this->faker->date,
             'views' => 0,
             'average_time' => 0,
         ];

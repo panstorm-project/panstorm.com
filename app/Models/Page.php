@@ -22,4 +22,16 @@ final class Page extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array{bucket: 'datetime'}
+     */
+    protected function casts(): array
+    {
+        return [
+            'bucket' => 'datetime',
+        ];
+    }
 }

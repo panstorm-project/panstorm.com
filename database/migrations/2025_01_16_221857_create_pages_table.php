@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('project_id')->constrained();
+            $table->string('path');
+            $table->dateTime('bucket');
             $table->unsignedBigInteger('views');
             $table->integer('average_time');
             $table->timestamps();
