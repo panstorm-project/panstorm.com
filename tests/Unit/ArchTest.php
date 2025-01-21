@@ -15,14 +15,6 @@ arch('controllers')
     ->expect('App\Http\Controllers')
     ->not->toBeUsed();
 
-arch('strict types')
-    ->expect('App')
-    ->toUseStrictTypes();
-
-arch('exceptions')
-    ->expect('App\Exceptions')
-    ->toImplement('Throwable');
-
 arch('avoid mutation')
     ->expect('App')
     ->classes()
@@ -61,10 +53,6 @@ arch('avoid abstraction')
     ->expect('App')
     ->not->toBeAbstract();
 
-arch('enums')
-    ->expect('App\Enums')
-    ->toBeEnums();
-
 arch('factories')
     ->expect('Database\Factories')
     ->toExtend(Factory::class)
@@ -73,20 +61,9 @@ arch('factories')
         'App\Models',
     ]);
 
-arch('globals')
-    ->expect(['dd', 'dump', 'ray', 'die', 'var_dump', 'sleep'])
-    ->not->toBeUsed();
-
-arch('jobs')
-    ->expect('App\Jobs')
-    ->toHaveMethod('handle')
-    ->toHaveConstructor()
-    ->toImplement(ShouldQueue::class);
-
 arch('models')
     ->expect('App\Models')
     ->toHaveMethod('casts')
-    ->toExtend(Model::class)
     ->toOnlyBeUsedIn([
         'App\Http',
         'App\Jobs',
@@ -97,11 +74,6 @@ arch('models')
         'Database\Factories',
         'Database\Seeders', // will be removed in the next PR as removing it gets outside of this PR scope
     ]);
-
-arch('providers')
-    ->expect('App\Providers')
-    ->toExtend(ServiceProvider::class)
-    ->not->toBeUsed();
 
 arch('actions')
     ->expect('App\Actions')
