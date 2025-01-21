@@ -10,7 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.38.2",
+        "laravel/framework": "^11.39.0",
         "laravel/tinker": "^2.10"
     },
     "require-dev": {
@@ -22,11 +22,11 @@
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.5",
         "peckphp/peck": "^0.1.1",
-        "pestphp/pest": "^3.7.1",
+        "pestphp/pest": "^3.7.2",
         "pestphp/pest-plugin-laravel": "^3.0",
         "pestphp/pest-plugin-stressless": "^3.1",
         "pestphp/pest-plugin-type-coverage": "^3.2.3",
-        "rector/rector": "^2.0.6"
+        "rector/rector": "^2.0.7"
     },
     "autoload": {
         "psr-4": {
