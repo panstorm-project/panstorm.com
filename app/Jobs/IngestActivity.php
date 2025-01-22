@@ -33,7 +33,7 @@ final class IngestActivity implements ShouldQueue
         /**
          * @var array<array{
          *     type: string,
-         *     payload: array{ url: string, seconds: int }
+         *     payload: array{ url: string, seconds: string }
          * }> $events
          */
         $events = $this->activity->events;
@@ -108,6 +108,7 @@ final class IngestActivity implements ShouldQueue
     {
         /** @var string $path */
         $path = parse_url($url, PHP_URL_PATH);
+
         return mb_trim($path, '/');
     }
 }
