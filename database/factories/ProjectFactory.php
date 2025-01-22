@@ -21,7 +21,7 @@ final class ProjectFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->name(),
+            'name' => fake()->name(),
         ];
     }
 }
