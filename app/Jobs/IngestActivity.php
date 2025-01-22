@@ -32,10 +32,7 @@ final class IngestActivity implements ShouldQueue
         $events = $this->activity->events;
 
         collect($events)
-            ->map(fn (array $event): Event => match ($event['type']) {
-                EventType::View->value => EventType::view($event['payload']['url']),
-                EventType::ViewDuration->value => EventType::viewDuration($event['payload']['url'], (int) $event['payload']['seconds']),
-            })->each(function (Event $event): void {
+            ->each(function (Event $event): void {
                 $path = $this->urlToPath($event->payload['url']);
                 $bucket = $this->bucket->setTime($this->bucket->hour, 0, 0);
 
@@ -97,6 +94,6 @@ final class IngestActivity implements ShouldQueue
      */
     private function urlToPath(string $url): string
     {
-        return mb_trim(parse_url($url, PHP_URL_PATH), '/');
+        return mb_trim((string) parse_url($url, PHP_URL_PATH), '/');
     }
 }
