@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property-read int $id
- * @property int $project_id
- * @property array<int, Event> $events
+ * @property-read int $project_id
+ * @property-read array<int, Event> $events
  * @property-read Project $project
  * @property-read CarbonInterface $created_at
  * @property-read CarbonInterface $updated_at

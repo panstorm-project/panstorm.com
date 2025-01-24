@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-use Carbon\CarbonImmutable;
 use App\Casts\EventsCast;
-use App\ValueObjects\Event;
-use App\Models\Activity;
 use App\Enums\EventType;
+use App\Models\Activity;
+use App\ValueObjects\Event;
 
 beforeEach(function () {
     $this->cast = new EventsCast();

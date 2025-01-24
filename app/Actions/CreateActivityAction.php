@@ -9,7 +9,7 @@ use App\Models\Project;
 use App\ValueObjects\Event;
 use Illuminate\Support\Facades\DB;
 
-final readonly class CreateActivity
+final readonly class CreateActivityAction
 {
     /**
      * Handles the action.

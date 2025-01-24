@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\CreateActivity;
+use App\Actions\CreateActivityAction;
 use App\Enums\EventType;
 use App\Jobs\IngestActivity;
 use App\Models\Project;
@@ -14,7 +14,7 @@ it('creates a new activity', function () {
     Queue::fake();
 
     $project = Project::factory()->create();
-    $action = app(CreateActivity::class);
+    $action = app(CreateActivityAction::class);
 
     $action->handle($project, [
         EventType::view('/about'),

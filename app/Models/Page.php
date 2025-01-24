@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property-read int $id
+ *
  * @propert int $project_id
+ *
  * @property string $path
  * @property CarbonInterface $bucket
  * @property int $views
