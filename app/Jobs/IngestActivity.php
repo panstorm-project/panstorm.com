@@ -11,6 +11,7 @@ use App\ValueObjects\Event;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use InvalidArgumentException;
 
 final class IngestActivity implements ShouldQueue
 {
@@ -19,7 +20,7 @@ final class IngestActivity implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private Activity $activity, private CarbonImmutable $bucket)
+    public function __construct(private readonly Activity $activity, private readonly CarbonImmutable $bucket)
     {
         //
     }
@@ -29,17 +30,25 @@ final class IngestActivity implements ShouldQueue
      */
     public function handle(): void
     {
+        /**
+         * @var array<array{
+         *     type: string,
+         *     payload: array{ url: string, seconds: string }
+         * }> $events
+         */
         $events = $this->activity->events;
 
         collect($events)
             ->map(fn (array $event): Event => match ($event['type']) {
                 EventType::View->value => EventType::view($event['payload']['url']),
                 EventType::ViewDuration->value => EventType::viewDuration($event['payload']['url'], (int) $event['payload']['seconds']),
+                default => throw new InvalidArgumentException('Invalid event type'),
             })->each(function (Event $event): void {
                 $path = $this->urlToPath($event->payload['url']);
                 $bucket = $this->bucket->setTime($this->bucket->hour, 0, 0);
 
-                $page = $this->activity->project->pages()->firstOrCreate([
+                /** @var Page $page */
+                $page = $this->activity->project?->pages()->firstOrCreate([
                     'path' => $path,
                     'bucket' => $bucket,
                 ], [
@@ -97,6 +106,9 @@ final class IngestActivity implements ShouldQueue
      */
     private function urlToPath(string $url): string
     {
-        return mb_trim(parse_url($url, PHP_URL_PATH), '/');
+        /** @var string $path */
+        $path = parse_url($url, PHP_URL_PATH);
+
+        return mb_trim($path, '/');
     }
 }
