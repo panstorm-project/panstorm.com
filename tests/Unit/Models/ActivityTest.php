@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\EventType;
 use App\Models\Activity;
 use App\Models\Project;
+use App\ValueObjects\Event;
 use Pest\Expectation;
 
 test('to array', function () {
@@ -36,18 +37,22 @@ it('casts events to array', function () {
 
     expect($activity->events)->toBeArray()->toHaveCount(2)
         ->sequence(
-            fn (Expectation $event) => $event->toBe([
-                'type' => 'view',
-                'payload' => [
-                    'url' => '/about',
-                ],
-            ]),
-            fn (Expectation $event) => $event->toBe([
-                'type' => 'view_duration',
-                'payload' => [
-                    'url' => '/about',
-                    'seconds' => '42',
-                ],
-            ]),
+            fn (Expectation $event) => $event->toEqual(
+                new Event(
+                    type: EventType::View,
+                    payload: [
+                        'url' => '/about',
+                    ],
+                )
+            ),
+            fn (Expectation $event) => $event->toEqual(
+                new Event(
+                    type: EventType::ViewDuration,
+                    payload: [
+                        'url' => '/about',
+                        'seconds' => '42',
+                    ],
+                )
+            ),
         );
 });
