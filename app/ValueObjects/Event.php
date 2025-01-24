@@ -15,4 +15,17 @@ final readonly class Event
         public EventType $type,
         public array $payload,
     ) {}
+
+    /**
+     * Instantiate the Event ValueObject from an array.
+     *
+     * @param  array{type: string, payload: array<string, string>}  $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            type: EventType::from($data['type']),
+            payload: $data['payload'],
+        );
+    }
 }

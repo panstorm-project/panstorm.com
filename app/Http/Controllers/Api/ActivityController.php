@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\CreateActivityAction;
 use App\Http\Requests\CreateActivityRequest;
 use App\Models\Project;
-use Illuminate\Http\Request;
+use App\ValueObjects\Event;
 use Illuminate\Http\Response;
 
 final readonly class ActivityController
@@ -17,7 +17,10 @@ final readonly class ActivityController
      */
     public function store(CreateActivityRequest $request, Project $project, CreateActivityAction $action): Response
     {
-        $action->handle($project, $request->array('events'));
+        /** @var array<array{type: string, payload: array<string, string>}> $events */
+        $events = $request->validated('events');
+
+        $action->handle($project, array_map(fn (array $event): Event => Event::fromArray($event), $events));
 
         return response(status: 201);
     }

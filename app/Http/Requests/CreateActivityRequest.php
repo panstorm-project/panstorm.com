@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Enums\EventType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateActivityRequest extends FormRequest
+final class CreateActivityRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +22,7 @@ class CreateActivityRequest extends FormRequest
             'events.*.type' => ['required', 'string', Rule::enum(EventType::class)],
             'events.*.payload' => ['required', 'array'],
             'events.*.payload.url' => [
-                Rule::requiredIf(fn () => $this->input('events.*.type') === EventType::View),
+                'required_if:events.*.type,'.EventType::View->value,
                 'string',
             ],
         ];
