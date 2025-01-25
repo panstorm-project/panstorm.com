@@ -11,6 +11,7 @@ use App\ValueObjects\Event;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Collection;
 
 final class IngestActivity implements ShouldQueue
 {
@@ -31,9 +32,10 @@ final class IngestActivity implements ShouldQueue
     {
         $events = $this->activity->events;
 
+        // Group events by URL and bucket to process them together
         collect($events)
-            ->each(function (Event $event): void {
-                $path = $this->urlToPath($event->payload['url']);
+            ->groupBy(fn (Event $event) => $this->urlToPath($event->payload['url']))
+            ->each(function (Collection $urlEvents, string $path): void {
                 $bucket = $this->bucket->setTime($this->bucket->hour, 0, 0);
 
                 /** @var Page $page */
@@ -45,48 +47,33 @@ final class IngestActivity implements ShouldQueue
                     'average_time' => 0,
                 ]);
 
-                match ($event->type) {
-                    EventType::View => $this->handleView($page),
-                    EventType::ViewDuration => $this->handleViewDuration($page, $event),
-                };
+                // Count views and sum durations
+                $viewCount = $urlEvents->filter(fn (Event $event) => $event->type === EventType::View)->count();
+                $durationCollection = $urlEvents
+                    ->filter(fn (Event $event) => $event->type === EventType::ViewDuration)
+                    ->map(fn (Event $event) => (int) $event->payload['seconds']);
+
+                // Update page with aggregated stats
+                $this->updatePageStats($page, $viewCount, $durationCollection);
             });
 
         $this->activity->delete();
     }
 
-    /**
-     * Handle the view event.
-     */
-    private function handleView(Page $page): void
+    private function updatePageStats(Page $page, int $newViews, Collection $durationCollection): void
     {
-        $averageTime = $page->average_time;
-        $views = $page->views + 1;
+        $oldViews = $page->views;
+        $oldAverage = $page->average_time;
+        $totalViews = $oldViews + $newViews;
+
+        // Calculate new average time
+        $newAverage = $totalViews > 0
+            ? (($oldAverage * $oldViews) + $durationCollection->sum()) / $totalViews
+            : 0;
 
         $page->update([
-            'views' => $views,
-            'average_time' => $averageTime === 0
-                ? 0
-                : $averageTime / $views,
-        ]);
-    }
-
-    /**
-     * Handle the view duration event.
-     */
-    private function handleViewDuration(Page $page, Event $event): void
-    {
-        $views = $page->views;
-
-        if ($views === 0) {
-            return;
-        }
-
-        $averageTime = $page->average_time;
-        $seconds = (int) $event->payload['seconds'];
-        $page->update([
-            'average_time' => $averageTime === 0
-                ? $seconds
-                : ($averageTime * $views + $seconds) / $views,
+            'views' => $totalViews,
+            'average_time' => $newAverage,
         ]);
     }
 
