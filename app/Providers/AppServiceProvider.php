@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Project;
+use App\Policies\ProjectPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +35,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureDates();
         $this->configureUrls();
         $this->configureVite();
+        $this->configurePolicies();
     }
 
     /**
@@ -76,5 +80,13 @@ final class AppServiceProvider extends ServiceProvider
     private function configureVite(): void
     {
         Vite::useAggressivePrefetching();
+    }
+
+    /**
+     * Configure the application's policies.
+     */
+    private function configurePolicies(): void
+    {
+        Gate::policy(Project::class, ProjectPolicy::class);
     }
 }
