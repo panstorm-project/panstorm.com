@@ -74,7 +74,7 @@ it('does not handle corrupted events', function () {
                 'payload' => [
                     //
                 ],
-            ]
+            ],
         ],
     ]);
 
