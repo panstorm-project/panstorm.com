@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\EventType;
 use App\Jobs\IngestActivity;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach()->only();
@@ -12,16 +13,18 @@ beforeEach()->only();
 it('can create an activity', function () {
     // Arrange...
     Queue::fake([IngestActivity::class]);
-    $project = Project::factory()->create()->fresh();
+    $authUser = User::factory()->create();
+    $project = Project::factory()->for($authUser)->create()->fresh();
 
     $events = [
         EventType::view('/about'),
     ];
 
     // Act...
-    $response = $this->postJson(route('api.activities.store', $project), [
-        'events' => $events,
-    ]);
+    $response = $this->actingAs($authUser)
+        ->postJson(route('api.activities.store', $project), [
+            'events' => $events,
+        ]);
 
     // Assert...
     $response->assertStatus(201);
@@ -32,15 +35,34 @@ it('can create an activity', function () {
     Queue::assertPushed(IngestActivity::class, 1);
 });
 
+it('cannot create an activity for a project that does not belong to the user', function () {
+    Queue::fake([IngestActivity::class]);
+    $project = Project::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('api.activities.store', $project), [
+            'events' => [
+                EventType::view('/about'),
+            ],
+        ])
+        ->assertStatus(403);
+
+    $this->assertDatabaseCount('activities', 0);
+
+    Queue::assertNotPushed(IngestActivity::class);
+});
+
 it('does not handle empty events', function () {
     // Arrange...
     Queue::fake([IngestActivity::class]);
-    $project = Project::factory()->create()->fresh();
+    $authUser = User::factory()->create();
+    $project = Project::factory()->for($authUser)->create()->fresh();
 
     // Act...
-    $response = $this->postJson(route('api.activities.store', $project), [
-        'events' => [],
-    ]);
+    $response = $this->actingAs($authUser)
+        ->postJson(route('api.activities.store', $project), [
+            'events' => [],
+        ]);
 
     // Assert...
     $response->assertStatus(422)->assertJsonValidationErrors([
@@ -56,27 +78,29 @@ it('does not handle empty events', function () {
 it('does not handle corrupted events', function () {
     // Arrange...
     Queue::fake([IngestActivity::class]);
-    $project = Project::factory()->create()->fresh();
+    $authUser = User::factory()->create();
+    $project = Project::factory()->for($authUser)->create()->fresh();
 
     // Act...
-    $response = $this->postJson(route('api.activities.store', $project), [
-        'events' => [
-            1,
-            'string',
-            [
+    $response = $this->actingAs($authUser)
+        ->postJson(route('api.activities.store', $project), [
+            'events' => [
                 1,
-            ],
-            [
-                'type' => 'view',
-            ],
-            [
-                'type' => 'view',
-                'payload' => [
-                    //
+                'string',
+                [
+                    1,
                 ],
-            ]
-        ],
-    ]);
+                [
+                    'type' => 'view',
+                ],
+                [
+                    'type' => 'view',
+                    'payload' => [
+                        //
+                    ],
+                ],
+            ],
+        ]);
 
     // Assert...
     $response->assertStatus(422)->assertJsonValidationErrors([

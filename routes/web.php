@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::prefix('api')->group(function () {
-    Route::prefix('{project}')->group(function () {
+    Route::prefix('{project}')->middleware('can:view,project')->group(function () {
         Route::post('activities', [ActivityController::class, 'store'])->name('api.activities.store');
     });
 });

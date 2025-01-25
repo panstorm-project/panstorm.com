@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Api;
 use App\Actions\CreateActivityAction;
 use App\Http\Requests\CreateActivityRequest;
 use App\Models\Project;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 final readonly class ActivityController
