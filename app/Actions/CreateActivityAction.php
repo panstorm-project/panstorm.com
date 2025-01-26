@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Jobs\IngestActivity;
+use App\Jobs\IngestActivityJob;
 use App\Models\Project;
 use App\ValueObjects\Event;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +23,7 @@ final readonly class CreateActivityAction
                 'events' => $events,
             ]);
 
-            IngestActivity::dispatch($activity, now());
+            IngestActivityJob::dispatch($activity, now());
         });
     }
 }

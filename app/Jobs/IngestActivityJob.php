@@ -12,7 +12,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-final class IngestActivity implements ShouldQueue
+final class IngestActivityJob implements ShouldQueue
 {
     use Queueable;
 

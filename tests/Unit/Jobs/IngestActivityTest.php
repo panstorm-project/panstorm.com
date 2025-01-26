@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\EventType;
-use App\Jobs\IngestActivity;
+use App\Jobs\IngestActivityJob;
 use App\Models\Activity;
 use App\Models\Page;
 use Illuminate\Support\Facades\Date;
@@ -21,7 +21,7 @@ it('can ingest activity events', function () {
         ],
     ]);
 
-    $job = new IngestActivity($activity, now());
+    $job = new IngestActivityJob($activity, now());
 
     // act...
     $job->handle();
@@ -47,7 +47,7 @@ it('ignore view duration event with no views', function () {
         ],
     ]);
 
-    $job = new IngestActivity($activity, now());
+    $job = new IngestActivityJob($activity, now());
 
     // act...
     $job->handle();
@@ -70,7 +70,7 @@ it('ignore view duration if there no view duration sent', function () {
         ],
     ]);
 
-    $job = new IngestActivity($activity, now());
+    $job = new IngestActivityJob($activity, now());
 
     // act...
     $job->handle();
@@ -100,11 +100,11 @@ it('handles well visits on different buckets', function () {
         ],
     ]);
 
-    $jobA = new IngestActivity(
+    $jobA = new IngestActivityJob(
         $activityA,
         Date::create(2025, 1, 1, 1, 10, 0)
     );
-    $jobB = new IngestActivity(
+    $jobB = new IngestActivityJob(
         $activityB,
         Date::create(2025, 1, 1, 2, 30, 0)
     );
