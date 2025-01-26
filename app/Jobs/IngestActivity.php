@@ -32,26 +32,32 @@ final class IngestActivity implements ShouldQueue
         $events = $this->activity->events;
 
         collect($events)
-            ->each(function (Event $event): void {
-                $path = $this->urlToPath($event->payload['url']);
-                $bucket = $this->bucket->setTime($this->bucket->hour, 0, 0);
-
-                /** @var Page $page */
-                $page = $this->activity->project->pages()->firstOrCreate([
-                    'path' => $path,
-                    'bucket' => $bucket,
-                ], [
-                    'views' => 0,
-                    'average_time' => 0,
-                ]);
-
-                match ($event->type) {
-                    EventType::View => $this->handleView($page),
-                    EventType::ViewDuration => $this->handleViewDuration($page, $event),
-                };
-            });
+            ->each($this->processEvent(...));
 
         $this->activity->delete();
+    }
+
+    /**
+     * Process the event.
+     */
+    private function processEvent(Event $event): void
+    {
+        $path = $this->urlToPath($event->payload['url']);
+        $bucket = $this->bucket->setTime($this->bucket->hour, 0, 0);
+
+        /** @var Page $page */
+        $page = $this->activity->project->pages()->firstOrCreate([
+            'path' => $path,
+            'bucket' => $bucket,
+        ], [
+            'views' => 0,
+            'average_time' => 0,
+        ]);
+
+        match ($event->type) {
+            EventType::View => $this->handleView($page),
+            EventType::ViewDuration => $this->handleViewDuration($page, $event),
+        };
     }
 
     /**
