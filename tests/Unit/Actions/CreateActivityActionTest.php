@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\CreateActivityAction;
 use App\Enums\EventType;
-use App\Jobs\IngestActivity;
+use App\Jobs\IngestActivityJob;
 use App\Models\Project;
 use App\ValueObjects\Event;
 use Illuminate\Support\Facades\Queue;
@@ -44,5 +44,5 @@ it('creates a new activity', function () {
             ),
         );
 
-    Queue::assertPushed(IngestActivity::class, 1);
+    Queue::assertPushed(IngestActivityJob::class, 1);
 });
