@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Enums\EventType;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 final class CreateActivityRequest extends FormRequest
 {
@@ -26,5 +28,18 @@ final class CreateActivityRequest extends FormRequest
                 'string',
             ],
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+        $errors->add('events', 'The events field is invalid.');
+
+        $response = response()->json([
+            'events' => 'The events field is invalid.',
+            'errors' => $validator->errors(),
+        ], 422);
+
+        throw new ValidationException($validator, $response);
     }
 }
