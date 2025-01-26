@@ -36,7 +36,6 @@ final class CreateActivityRequest extends FormRequest
         $errors->add('events', 'The events field is invalid.');
 
         $response = response()->json([
-            'events' => 'The events field is invalid.',
             'errors' => $validator->errors(),
         ], 422);
 
