@@ -30,7 +30,14 @@ final class CreateActivityRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @return void
+     *
+     * @throws ValidationException
+     */
+    protected function failedValidation(Validator $validator): void
     {
         $errors = $validator->errors();
         $errors->add('events', 'The events field is invalid.');
