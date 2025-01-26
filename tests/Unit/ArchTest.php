@@ -20,6 +20,7 @@ arch('avoid mutation')
         'App\Exceptions',
         'App\Jobs',
         'App\Models',
+        'App\Events',
         'App\Providers',
         'App\Services',
     ]);
