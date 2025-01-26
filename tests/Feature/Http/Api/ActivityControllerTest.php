@@ -7,8 +7,6 @@ use App\Jobs\IngestActivity;
 use App\Models\Project;
 use Illuminate\Support\Facades\Queue;
 
-beforeEach()->only();
-
 it('can create an activity', function () {
     // Arrange...
     Queue::fake([IngestActivity::class]);

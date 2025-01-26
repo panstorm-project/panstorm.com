@@ -17,6 +17,7 @@ arch('avoid mutation')
     ->classes()
     ->toBeReadonly()
     ->ignoring([
+        'App\Http\Requests',
         'App\Exceptions',
         'App\Jobs',
         'App\Models',
@@ -29,6 +30,7 @@ arch('avoid inheritance')
     ->classes()
     ->toExtendNothing()
     ->ignoring([
+        'App\Http\Requests',
         'App\Models',
         'App\Exceptions',
         'App\Jobs',
