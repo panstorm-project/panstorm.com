@@ -16,7 +16,7 @@ it('can create an activity', function () {
 
     $events = [
         [
-            'type' => EventType::View->value, // Use enum value
+            'type' => EventType::View->value,
             'payload' => [
                 'url' => '/about', // Required for EventType::View
             ],
