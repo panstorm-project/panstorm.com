@@ -7,7 +7,7 @@ use App\Jobs\IngestActivity;
 use App\Models\Project;
 use Illuminate\Support\Facades\Queue;
 
-beforeEach()->only();
+
 
 it('can create an activity', function () {
     // Arrange...
@@ -15,7 +15,12 @@ it('can create an activity', function () {
     $project = Project::factory()->create()->fresh();
 
     $events = [
-        EventType::view('/about'),
+        [
+            'type' => EventType::View->value, // Use enum value
+            'payload' => [
+                'url' => '/about', // Required for EventType::View
+            ],
+        ],
     ];
 
     // Act...
