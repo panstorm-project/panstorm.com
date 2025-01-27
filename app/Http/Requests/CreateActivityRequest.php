@@ -22,7 +22,7 @@ final class CreateActivityRequest extends FormRequest
             'events.*.type' => ['required', 'string', Rule::enum(EventType::class)],
             'events.*.payload' => ['required', 'array'],
             'events.*.payload.url' => [
-                Rule::requiredIf(fn (): bool => $this->input('events.*.type') === EventType::View),
+                'required_if:events.*.type,'.EventType::View->value,
                 'string',
             ],
         ];

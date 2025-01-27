@@ -14,7 +14,7 @@ final readonly class CreateActivityAction
     /**
      * Handles the action.
      *
-     * @param  array<int, Event>  $events
+     * @param  array<Event>  $events
      */
     public function handle(Project $project, array $events): void
     {
