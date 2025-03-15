@@ -7,8 +7,6 @@ use App\Jobs\IngestActivity;
 use App\Models\Project;
 use Illuminate\Support\Facades\Queue;
 
-beforeEach()->only();
-
 it('can create an activity', function () {
     // Arrange...
     Queue::fake([IngestActivity::class]);
@@ -79,8 +77,18 @@ it('does not handle corrupted events', function () {
     ]);
 
     // Assert...
-    $response->assertStatus(422)->assertJsonValidationErrors([
-        'events' => 'The events field is invalid.',
+    $response->assertStatus(422)->assertJson([
+        'message' => 'The events.0.type field is required. (and 7 more errors)',
+        'errors' => [
+            'events.0.type' => ['The events.0.type field is required.'],
+            'events.1.type' => ['The events.1.type field is required.'],
+            'events.2.type' => ['The events.2.type field is required.'],
+            'events.0.payload' => ['The events.0.payload field is required.'],
+            'events.1.payload' => ['The events.1.payload field is required.'],
+            'events.2.payload' => ['The events.2.payload field is required.'],
+            'events.3.payload' => ['The events.3.payload field is required.'],
+            'events.4.payload' => ['The events.4.payload field is required.'],
+        ],
     ]);
 
     $activities = $project->activities;

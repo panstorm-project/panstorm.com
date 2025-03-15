@@ -16,7 +16,10 @@ final readonly class ActivityController
      */
     public function store(CreateActivityRequest $request, Project $project, CreateActivityAction $action): Response
     {
-        $action->handle($project, $request->array('events'));
+        /** @var array<int, array{type: string, payload: array<string, string>}> $events */
+        $events = $request->array('events');
+
+        $action->handle($project, $events);
 
         return response(status: 201);
     }

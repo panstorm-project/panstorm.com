@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 arch()->preset()->php();
@@ -19,9 +20,11 @@ arch('avoid mutation')
     ->ignoring([
         'App\Exceptions',
         'App\Jobs',
+        'App\Http\Requests',
         'App\Models',
         'App\Providers',
         'App\Services',
+        HandleInertiaRequests::class,
     ]);
 
 arch('avoid inheritance')
@@ -32,8 +35,10 @@ arch('avoid inheritance')
         'App\Models',
         'App\Exceptions',
         'App\Jobs',
+        'App\Http\Requests',
         'App\Providers',
         'App\Services',
+        HandleInertiaRequests::class,
     ]);
 
 arch('annotations')

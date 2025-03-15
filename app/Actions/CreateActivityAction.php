@@ -6,7 +6,6 @@ namespace App\Actions;
 
 use App\Jobs\IngestActivity;
 use App\Models\Project;
-use App\ValueObjects\Event;
 use Illuminate\Support\Facades\DB;
 
 final readonly class CreateActivityAction
@@ -14,7 +13,7 @@ final readonly class CreateActivityAction
     /**
      * Handles the action.
      *
-     * @param  array<int, Event>  $events
+     * @param  array<int, array{type: string, payload: array<string, string>}>  $events
      */
     public function handle(Project $project, array $events): void
     {
